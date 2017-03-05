@@ -1,6 +1,10 @@
 package com.kaisheng;
 
 import com.kaisheng.pojo.User;
+import io.protostuff.LinkedBuffer;
+import io.protostuff.ProtobufIOUtil;
+import io.protostuff.Schema;
+import io.protostuff.runtime.RuntimeSchema;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
@@ -12,15 +16,35 @@ import redis.clients.jedis.JedisPool;
 @Service
 public class UserService {
 
-
+    @Autowired
     private RedisTemplate redisTemplate;
+
+    public void springRedisTest () {
+        User user = new User(102,"tom",99.9F);
+        Schema<User> userSchema = RuntimeSchema.getSchema(User.class);
+        //把user转为byte数组
+        byte[] userByte = ProtobufIOUtil.toByteArray(user,userSchema, LinkedBuffer.allocate(LinkedBuffer.DEFAULT_BUFFER_SIZE));
+        redisTemplate.opsForValue().set("user:102".getBytes(),userByte);//将键和值都转为byte
+    }
+
+    public void getSpringRedisTest() {
+        Schema<User> userSchema = RuntimeSchema.getSchema(User.class);
+        User user = new User();
+        byte[] userByte = (byte[]) redisTemplate.opsForValue().get("user:102".getBytes());
+        ProtobufIOUtil.mergeFrom(userByte,user,userSchema);
+        System.out.println(user);
+    }
+
+
+// spring date redis 连接
+   /* private RedisTemplate redisTemplate;
 
     @Autowired
     public void setRedisTemplate(RedisTemplate redisTemplate) {
         this.redisTemplate = redisTemplate;
         //默认是以jdk序列化 改为string格式
-       /* redisTemplate.setKeySerializer(new StringRedisSerializer());
-        redisTemplate.setValueSerializer(new StringRedisSerializer());*/
+       *//* redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.setValueSerializer(new StringRedisSerializer());*//*
 
        //将一个对象存放redis中 序列化json存入redis中
         redisTemplate.setKeySerializer(new StringRedisSerializer());
@@ -42,7 +66,7 @@ public class UserService {
         User user = (User) redisTemplate.opsForValue().get("user:101");
         System.out.println(user);
         return null;
-    }
+    }*/
 
 
    // spring 连接

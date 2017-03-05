@@ -9,6 +9,8 @@ public class User {
     private String name;
     private Float score;
 
+    public User(){}
+
     public User(Integer id, String name, float score) {
         this.id = id;
         this.name = name;
