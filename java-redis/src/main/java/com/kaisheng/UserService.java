@@ -1,5 +1,6 @@
 package com.kaisheng;
 
+import com.kaisheng.dao.UserDao;
 import com.kaisheng.pojo.User;
 import io.protostuff.LinkedBuffer;
 import io.protostuff.ProtobufIOUtil;
@@ -15,8 +16,19 @@ import redis.clients.jedis.JedisPool;
 
 @Service
 public class UserService {
-
     @Autowired
+    private UserDao userDao;
+
+    public void saveUser(User user) {
+        userDao.save(user);
+    }
+
+    public User findUserByUserName(String userName) {
+        return userDao.findUserByUserName(userName);
+    }
+
+//使用protostuff添加对象
+    /*@Autowired
     private RedisTemplate redisTemplate;
 
     public void springRedisTest () {
@@ -33,10 +45,10 @@ public class UserService {
         byte[] userByte = (byte[]) redisTemplate.opsForValue().get("user:102".getBytes());
         ProtobufIOUtil.mergeFrom(userByte,user,userSchema);
         System.out.println(user);
-    }
+    }*/
 
 
-// spring date redis 连接
+// spring date redis 放入对象
    /* private RedisTemplate redisTemplate;
 
     @Autowired

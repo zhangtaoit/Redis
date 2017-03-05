@@ -1,5 +1,6 @@
 package com.kaisheng;
 
+import com.kaisheng.pojo.User;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import redis.clients.jedis.Jedis;
@@ -40,12 +41,24 @@ public class redisTest {
     @Test
     public void springRedisTest() {
         //spring 测试
-        userService.springRedisTest();
+        //userService.springRedisTest();
     }
 
     @Test
     public void getSpringRedisTest() {
-        userService.getSpringRedisTest();
+        //userService.getSpringRedisTest();
+    }
+
+    @Test
+    public void saveUser() {
+        User user = new User(103,"rose",66.6F);
+        userService.saveUser(user);
+    }
+
+    @Test
+    public void findUserByUserName() {
+        User user = userService.findUserByUserName("rose");
+        System.out.println(user);
     }
 
 }
