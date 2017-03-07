@@ -3,6 +3,7 @@ package com.kaisheng.activity;
 
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.ProcessEngines;
+import org.activiti.engine.history.HistoricProcessInstance;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.runtime.ProcessInstance;
@@ -73,7 +74,7 @@ public class HelloTest {
      */
     @Test
     public void endActivity() {
-        engine.getTaskService().complete("42502");
+        engine.getTaskService().complete("50004");
         System.out.println("任务完成...");
     }
 
@@ -83,7 +84,7 @@ public class HelloTest {
     @Test
     public void zipStartActivity() {
         //获取zip文件的输入流
-       /* InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("diagrams/ZipHello.zip");
+       /* InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("diagrams/ZipHello.bpmn");
         ZipInputStream zipInputStream = new ZipInputStream(inputStream);
 
         Deployment deployment = engine.getRepositoryService()//获得RepositoryService
@@ -151,6 +152,19 @@ public class HelloTest {
 
         FileUtils.copyInputStreamToFile(inputStream,new File("D:/Hello.png"));
 
+    }
+
+    /**
+     * 获取历史流程实例  查询的是act_hi_procinst表
+     */
+    @Test
+    public void getHistory() {
+        HistoricProcessInstance historicProcessInstance = engine.getHistoryService()
+                .createHistoricProcessInstanceQuery() //创建历史查询对象
+                .processInstanceId("50001")//根据历史实例Id查询
+                //.processDefinitionKey("") //根据key值查询
+                .singleResult();
+        System.out.println("historicProcessInstance: " + historicProcessInstance);
     }
 
 }
