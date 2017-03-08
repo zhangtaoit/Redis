@@ -13,6 +13,7 @@ public class MoneyFlowTest {
 
     private ProcessEngine engine = ProcessEngines.getDefaultProcessEngine();
 
+//排他网关
     /**
      * 部署流程
      */
@@ -39,6 +40,35 @@ public class MoneyFlowTest {
         System.out.println("name: " + processInstance.getName());
         System.out.println("key:" + processInstance.getProcessDefinitionKey());
 
+    }
+//并行网关
+    /**
+     * 部署流程
+     */
+    @Test
+    public void parallelLeaveFlow() {
+        Deployment deployment = engine.getRepositoryService()
+                .createDeployment()
+                .name("parallel")
+                .addClasspathResource("diagrams/paralleLeave.bpmn")
+                .deploy();
+
+        System.out.println("name: " + deployment.getName() + "/id: " + deployment.getId());
+
+    }
+
+    /**
+     * 并行网关启动
+     */
+    @Test
+    public void startParallelLeave() {
+        ProcessInstance processInstance = engine.getRuntimeService().startProcessInstanceByKey("parallel");
+        System.out.println("name:" + processInstance.getName());
+    }
+
+    @Test
+    public void endParallelLeave() {
+        engine.getTaskService().complete("140010");
     }
 
 }
