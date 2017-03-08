@@ -7,7 +7,7 @@ import org.apache.ibatis.annotations.One;
 import org.junit.Test;
 
 import java.util.*;
-
+//设置流程变量
 public class VariableTest {
 
     ProcessEngine engine = ProcessEngines.getDefaultProcessEngine();
